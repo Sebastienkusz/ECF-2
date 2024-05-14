@@ -111,6 +111,13 @@ variable "ssh_port" {
   default     = "22"
 }
 
+variable "http_port" {
+  type        = string
+  description = "HTTP Port"
+  nullable    = false
+  default     = "80"
+}
+
 variable "ssh_ip_filter" {
   type        = list(any)
   description = "List of IP available to connect with ssh"

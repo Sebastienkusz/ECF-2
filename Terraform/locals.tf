@@ -19,7 +19,7 @@ locals {
   vm_domain_name_label        = "${local.resource_group_name}-vm"
   public_ip_sku               = "Standard"
 
-  vm_size = "Standard_B2s_v2"
+  vm_size = "Standard_D4_v4"
 
   os_disk_caching           = "ReadWrite"
   os_disk_create_option     = "FromImage"

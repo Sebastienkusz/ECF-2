@@ -31,7 +31,7 @@ resource "azurerm_network_interface_security_group_association" "main" {
   network_security_group_id = azurerm_network_security_group.main.id
 }
 
-# Règle de sécurité pour le port 22 (SSH) depuis n'importe quelle source sur le serveur Redis
+# Règle de sécurité pour le port 22 (SSH) depuis n'importe quelle source
 resource "azurerm_network_security_rule" "ssh" {
   name                        = "Allow-SSH-Inbound"
   priority                    = 110
@@ -40,6 +40,21 @@ resource "azurerm_network_security_rule" "ssh" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = var.ssh_port
+  source_address_prefixes     = var.ssh_ip_filter
+  destination_address_prefix  = azurerm_network_interface.main.private_ip_address
+  resource_group_name         = var.resource_group
+  network_security_group_name = azurerm_network_security_group.main.name
+}
+
+# Règle de sécurité pour le port 80 (HTTP) depuis n'importe quelle source
+resource "azurerm_network_security_rule" "kind" {
+  name                        = "Allow-HTTP-Inbound"
+  priority                    = 120
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = var.http_port
   source_address_prefixes     = var.ssh_ip_filter
   destination_address_prefix  = azurerm_network_interface.main.private_ip_address
   resource_group_name         = var.resource_group
