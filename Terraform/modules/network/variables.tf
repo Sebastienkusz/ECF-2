@@ -24,7 +24,7 @@ variable "vnet_1" {
 }
 
 variable "subnet_1" {
-  type        = list(string)
+  type        = map(any)
   description = "(Required) A list of address prefixes to use for the subnets."
-  default     = []
+  default     = {}
 }

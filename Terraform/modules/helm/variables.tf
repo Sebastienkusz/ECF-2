@@ -24,44 +24,44 @@ variable "server_domain" {
 
 # ---------------------------------------------------------------------------------
 # Prometheus
-variable "prometheus_chart" {
-  type        = string
-  description = "(Required) The chart of prometheus."
-  nullable    = false
-}
+# variable "prometheus_chart" {
+#   type        = string
+#   description = "(Required) The chart of prometheus."
+#   nullable    = false
+# }
 
-variable "prometheus_name" {
-  type        = string
-  description = "(Required) The name of prometheus in resource helm."
-  nullable    = false
-}
+# variable "prometheus_name" {
+#   type        = string
+#   description = "(Required) The name of prometheus in resource helm."
+#   nullable    = false
+# }
 
-variable "prometheus_namespace_creation" {
-  type        = bool
-  description = "(Required) Creation of the namaspace for prometheus."
-  nullable    = false
-  default     = true
-}
+# variable "prometheus_namespace_creation" {
+#   type        = bool
+#   description = "(Required) Creation of the namaspace for prometheus."
+#   nullable    = false
+#   default     = true
+# }
 
-variable "prometheus_namespace" {
-  type        = string
-  description = "(Required) The namespace of prometheus in resource helm."
-  nullable    = false
-}
+# variable "prometheus_namespace" {
+#   type        = string
+#   description = "(Required) The namespace of prometheus in resource helm."
+#   nullable    = false
+# }
 
-variable "prometheus_repository" {
-  type        = string
-  description = "(Required) The repository of prometheus in resource helm."
-  nullable    = false
-}
+# variable "prometheus_repository" {
+#   type        = string
+#   description = "(Required) The repository of prometheus in resource helm."
+#   nullable    = false
+# }
 
 # ---------------------------------------------------------------------------------
 # Grafana
-variable "grafana_admin" {
-  type        = string
-  description = "(Required) The admin username"
-  nullable    = false
-}
+# variable "grafana_admin" {
+#   type        = string
+#   description = "(Required) The admin username"
+#   nullable    = false
+# }
 
 variable "grafana_chart" {
   type        = string
@@ -75,13 +75,20 @@ variable "grafana_name" {
   nullable    = false
 }
 
+variable "grafana_namespace_creation" {
+  type        = bool
+  description = "(Required) Creation of the namaspace for ingress."
+  nullable    = false
+  default     = true
+}
+
 variable "grafana_namespace" {
   type        = string
   description = "(Required) The namespace of grafana in resource helm."
   nullable    = false
 }
 
-variable "grafana_repository" {
+variable "grafana_version" {
   type        = string
   description = "(Required) The repository of grafana in resource helm."
   nullable    = false

@@ -1,43 +1,10 @@
-resource "helm_release" "prometheus" {
-  chart            = var.prometheus_chart
-  name             = var.prometheus_name
-  create_namespace = var.prometheus_namespace_creation
-  namespace        = var.prometheus_namespace
-  repository       = var.prometheus_repository
-
-  set {
-    name  = "podSecurityPolicy.enabled"
-    value = true
-  }
-
-  set {
-    name  = "server.persistentVolume.enabled"
-    value = false
-  }
-}
-
-resource "random_password" "grafana" {
-  length           = 24
-  override_special = "@#"
-}
 
 resource "helm_release" "grafana" {
-  depends_on = [helm_release.prometheus]
   name       = var.grafana_name
   chart      = var.grafana_chart
+  create_namespace = var.grafana_namespace_creation
   namespace  = var.grafana_namespace
-  repository = var.grafana_repository
-
-  # Admin login
-  set {
-    name  = "adminUser"
-    value = var.grafana_admin
-  }
-
-  set {
-    name  = "adminPassword"
-    value = random_password.grafana.result
-  }
+  version = var.grafana_version
 
   # Ingress
   set {
@@ -47,12 +14,12 @@ resource "helm_release" "grafana" {
 
   set {
     name  = "ingress.annotations.kubernetes\\.io/ingress\\.class"
-    value = "azure/application-gateway"
+    value = "nginx"
   }
 
   set {
     name  = "ingress.path"
-    value = "/grafana"
+    value = "/"
   }
 
   set {
@@ -63,6 +30,20 @@ resource "helm_release" "grafana" {
   set {
     name  = "ingress.hosts[0]"
     value = var.server_domain
+  }
+
+  set {
+    name  = "ingress.extraPaths"
+    value = yamlencode({
+        backend = { 
+          service = {
+            name =  "frontend-external"
+            port = {
+              number = 80
+            }
+          }
+        }
+    })
   }
 
   # Ingress cert manager
@@ -83,73 +64,8 @@ resource "helm_release" "grafana" {
 
   set {
     name  = "ingress.tls[0].secretName"
-    value = "grafana-tls-04-12-2023"
+    value = "boutique-tls-15-05-2024"
   }
-
-  # Ingress for Grafana path
-  set {
-    name  = "grafana\\.ini.server.domain"
-    value = var.server_domain
-  }
-
-  set {
-    name  = "grafana\\.ini.server.root_url"
-    value = "%(protocol)s://%(domain)s/grafana"
-  }
-
-  set {
-    name  = "grafana\\.ini.server.serve_from_sub_path"
-    value = true
-  }
-
-  # Datasource Grafana
-  set {
-    name  = "datasources.datasources\\.yaml.apiVersion"
-    value = "1"
-  }
-
-  set {
-    name  = "datasources.datasources\\.yaml.datasources[0].name"
-    value = "Prometheus"
-  }
-
-  set {
-    name  = "datasources.datasources\\.yaml.datasources[0].type"
-    value = "prometheus"
-  }
-
-  set {
-    name  = "datasources.datasources\\.yaml.datasources[0].url"
-    value = "http://prometheus-server.${var.grafana_namespace}.svc.cluster.local"
-  }
-
-  # Dashboard Grafana
-  # tflint-ignore: Invalid_function_argument
-  values = [
-    <<EOF
-dashboardProviders:
-  dashboardproviders.yaml:
-    apiVersion: 1
-    providers:
-    - name: 'default'
-      orgId: 1
-      folder: ''
-      type: file
-      disableDeletion: false
-      editable: true
-      options:
-        path: /var/lib/grafana/dashboards/default
-
-dashboards:
-  default:
-    kubernetes:
-      json: |
-        ${indent(8, file("${path.root}/dashboards/Node_Exporter.json"))}
-    azure:
-      gntId: 14986
-      version: 1
-EOF
-  ]
 
 }
 

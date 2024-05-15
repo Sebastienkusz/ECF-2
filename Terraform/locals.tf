@@ -1,16 +1,20 @@
 # Variables générales:
 locals {
-  subscription_id     = "c56aea2c-50de-4adc-9673-6a8008892c21"
-  resource_group      = "Sebastien_K"
-  location            = data.azurerm_resource_group.main.location
+  subscription_id = "c56aea2c-50de-4adc-9673-6a8008892c21"
+  resource_group  = "Sebastien_K"
+  location        = "francecentral" # data.azurerm_resource_group.main.location
   #tenant_id           = "16763265-1998-4c96-826e-c04162b1e041"
-  resource_group_name = "${lower(replace(local.resource_group, "_", ""))}"
+  resource_group_name = lower(replace(local.resource_group, "_", ""))
 }
 
 # Network variables (only 2 networks)
 locals {
   network_europe = ["10.1.0.0/16"]
-  subnets_europe = ["10.1.1.0/24", "10.1.2.0/24", "10.1.3.0/24"]
+  subnets_europe = {
+    "test"  = "10.1.1.0/24"
+    "aks"   = "10.1.2.0/24"
+    "appgw" = "10.1.3.0/24"
+  }
 }
 
 # Variables pour la machine virtuelle
@@ -19,7 +23,7 @@ locals {
   vm_domain_name_label        = "${local.resource_group_name}-vm"
   public_ip_sku               = "Standard"
 
-  vm_size = "Standard_B2s_v2"
+  vm_size = "Standard_D4_v4"
 
   os_disk_caching           = "ReadWrite"
   os_disk_create_option     = "FromImage"
@@ -73,25 +77,26 @@ locals {
 }
 
 # Variables pour le module helm - Prometheus, Grafana, Ingress, Cert-Manager
-# locals {
+locals {
 #   prometheus_chart                = "prometheus"
 #   prometheus_name                 = "prometheus"
 #   prometheus_namespace_creation   = true
 #   prometheus_namespace            = "monitoring"
 #   prometheus_repository           = "https://prometheus-community.github.io/helm-charts"
-#   grafana_admin                   = "admin"
-#   grafana_name                    = "grafana"
-#   grafana_chart                   = "grafana"
-#   grafana_namespace               = local.prometheus_namespace
-#   grafana_repository              = "https://grafana.github.io/helm-charts"
-#   ingress_chart                   = "ingress-azure"
-#   ingress_name                    = "ingress-azure"
-#   ingress_namespace_creation      = true
-#   ingress_namespace               = "ingress-azure"
-#   ingress_repository              = "https://appgwingress.blob.core.windows.net/ingress-azure-helm-package/"
-#   cert_manager_chart              = "cert-manager"
-#   cert_manager_name               = "cert-manager"
-#   cert_manager_namespace_creation = true
-#   cert_manager_namespace          = "cert-manager"
-#   cert_manager_repository         = "https://charts.jetstack.io"
-# }
+  # grafana_admin                   = "admin"
+  grafana_name                    = "onlineboutique"
+  grafana_chart                   = "oci://us-docker.pkg.dev/online-boutique-ci/charts/onlineboutique"
+  grafana_namespace_creation = true
+  grafana_namespace               = "onlineboutique"
+  grafana_version                 = "0.9.0"
+  ingress_chart                   = "ingress-azure"
+  ingress_name                    = "ingress-azure"
+  ingress_namespace_creation      = true
+  ingress_namespace               = "ingress-azure"
+  ingress_repository              = "https://appgwingress.blob.core.windows.net/ingress-azure-helm-package/"
+  cert_manager_chart              = "cert-manager"
+  cert_manager_name               = "cert-manager"
+  cert_manager_namespace_creation = true
+  cert_manager_namespace          = "cert-manager"
+  cert_manager_repository         = "https://charts.jetstack.io"
+}
