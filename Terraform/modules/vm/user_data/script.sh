@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 apt-get update
 
 cat > /ingress.yaml<< EOF
@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: sebastienk-vm.westeurope.cloudapp.azure.com
+    - host: sebastienk-vm.francecentral.cloudapp.azure.com
       http:
         paths:
           - pathType: Prefix
@@ -68,12 +68,17 @@ sudo snap install kubectl --classic
 # Clone repo Microservices
 git clone --depth 1 --branch v0 https://github.com/GoogleCloudPlatform/microservices-demo.git
 
+sudo mkdir .kube
+sudo adduser --gecos '' --disabled-password kind
 
+kind create cluster --config /kind-config.yaml --kubeconfig /.kube/config
 
-kind create cluster --config /kind-config.yaml
+sudo chmod 660 /.kube/config
+sudo chown -R kind: /.kube/
 
-sudo -u sebastien kubectl apply -f /microservices-demo/release/kubernetes-manifests.yaml
-sleep 30
-sudo -u sebastien kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-sleep 90
-sudo -u sebastien kubectl apply -f /ingress.yaml
+kubectl apply -f /microservices-demo/release/kubernetes-manifests.yaml --kubeconfig /.kube/config
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml --kubeconfig /.kube/config
+
+sleep 100
+kubectl apply -f /ingress.yaml --kubeconfig /.kube/config

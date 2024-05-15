@@ -4,7 +4,7 @@
   become: true
   user:
     name: "{{item.name}}"
-    groups: docker
+    groups: docker,kind
     shell: /bin/bash
     password: "{{tmp_password}}"
   with_items:
