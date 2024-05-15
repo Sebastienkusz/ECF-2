@@ -15,6 +15,6 @@ output "vm_test_fqdn" {
   value = " http://${module.vm.vm_fqdn} "
 }
 
-# output "gateway_fqdn" {
-#   value = " http://${module.gateway.gateway_fqdn} "
-# }
+output "gateway_fqdn" {
+  value = " http://${module.gateway.gateway_fqdn} "
+}

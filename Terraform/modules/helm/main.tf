@@ -32,6 +32,20 @@ resource "helm_release" "grafana" {
     value = var.server_domain
   }
 
+  set {
+    name  = "ingress.extraPaths"
+    value = yamlencode({
+        backend = { 
+          service = {
+            name =  "frontend-external"
+            port = {
+              number = 80
+            }
+          }
+        }
+    })
+  }
+
   # Ingress cert manager
   set {
     name  = "ingress.annotations.cert-manager\\.io/cluster-issuer"
