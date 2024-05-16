@@ -1,72 +1,10 @@
 
 resource "helm_release" "grafana" {
-  name       = var.grafana_name
-  chart      = var.grafana_chart
+  name             = var.grafana_name
+  chart            = var.grafana_chart
   create_namespace = var.grafana_namespace_creation
-  namespace  = var.grafana_namespace
-  version = var.grafana_version
-
-  # Ingress
-  set {
-    name  = "ingress.enabled"
-    value = true
-  }
-
-  set {
-    name  = "ingress.annotations.kubernetes\\.io/ingress\\.class"
-    value = "nginx"
-  }
-
-  set {
-    name  = "ingress.path"
-    value = "/"
-  }
-
-  set {
-    name  = "ingress.pathType"
-    value = "Prefix"
-  }
-
-  set {
-    name  = "ingress.hosts[0]"
-    value = var.server_domain
-  }
-
-  set {
-    name  = "ingress.extraPaths"
-    value = yamlencode({
-        backend = { 
-          service = {
-            name =  "frontend-external"
-            port = {
-              number = 80
-            }
-          }
-        }
-    })
-  }
-
-  # Ingress cert manager
-  set {
-    name  = "ingress.annotations.cert-manager\\.io/cluster-issuer"
-    value = "letsencrypt-issuer"
-  }
-
-  set {
-    name  = "ingress.annotations.cert-manager\\.io/acme-challenge-type"
-    value = "http01"
-  }
-
-  set {
-    name  = "ingress.tls[0].hosts[0]"
-    value = var.server_domain
-  }
-
-  set {
-    name  = "ingress.tls[0].secretName"
-    value = "boutique-tls-15-05-2024"
-  }
-
+  namespace        = var.grafana_namespace
+  version          = var.grafana_version
 }
 
 # Install nginx ingress controller form helm repo add application-gateway-kubernetes-ingress https://appgwingress.blob.core.windows.net/ingress-azure-helm-package/
@@ -112,49 +50,3 @@ resource "helm_release" "ingress-azure" {
   }
 }
 
-resource "helm_release" "cert_manager" {
-  name             = var.cert_manager_name
-  namespace        = var.cert_manager_namespace
-  create_namespace = var.cert_manager_namespace_creation
-  chart            = var.cert_manager_chart
-  repository       = var.cert_manager_repository
-  version          = "v1.13.1"
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
-}
-
-# resource "kubectl_manifest" "clusterissuer_letsencrypt_prod" {
-#   depends_on = [helm_release.cert_manager]
-#   yaml_body = <<YAML
-# apiVersion: cert-manager.io/v1
-# kind: ClusterIssuer
-# metadata:
-#   name: letsencrypt-issuer
-#   namespace: cert-manager
-# spec:
-#   acme:
-#     email: aazzce@aazzee.com
-#     server: https://acme-v02.api.letsencrypt.org/directory # Used for prod environnement
-#     privateKeySecretRef:
-#       name: letsencrypt
-#     solvers:
-#       - http01:
-#           ingress:
-#             class: azure/application-gateway
-# YAML
-# }
-
-# resource "helm_release" "rancher" {
-#   name             = var.rancher_name
-#   namespace        = var.rancher_namespace
-#   create_namespace = var.rancher_namespace_creation
-#   chart            = var.rancher_chart
-#   repository       = var.rancher_repository
-#   version          = "v1.13.1"
-#   set {
-#     name  = "installCRDs"
-#     value = "true"
-#   }
-# }

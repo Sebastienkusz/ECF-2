@@ -54,7 +54,7 @@ resource "azurerm_kubernetes_cluster" "main" {
   resource_group_name           = var.resource_group
   dns_prefix                    = "${var.resource_group_name}-${var.cluster_name}"
   node_resource_group           = "${var.resource_group_name}-${var.cluster_name}-node"
-  public_network_access_enabled = true
+  # public_network_access_enabled = true
 
   # ingress_application_gateway {
   #   gateway_id = var.gateway_id

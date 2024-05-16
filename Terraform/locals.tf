@@ -78,15 +78,15 @@ locals {
 
 # Variables pour le module helm - Prometheus, Grafana, Ingress, Cert-Manager
 locals {
-#   prometheus_chart                = "prometheus"
-#   prometheus_name                 = "prometheus"
-#   prometheus_namespace_creation   = true
-#   prometheus_namespace            = "monitoring"
-#   prometheus_repository           = "https://prometheus-community.github.io/helm-charts"
+  #   prometheus_chart                = "prometheus"
+  #   prometheus_name                 = "prometheus"
+  #   prometheus_namespace_creation   = true
+  #   prometheus_namespace            = "monitoring"
+  #   prometheus_repository           = "https://prometheus-community.github.io/helm-charts"
   # grafana_admin                   = "admin"
   grafana_name                    = "onlineboutique"
   grafana_chart                   = "oci://us-docker.pkg.dev/online-boutique-ci/charts/onlineboutique"
-  grafana_namespace_creation = true
+  grafana_namespace_creation      = true
   grafana_namespace               = "onlineboutique"
   grafana_version                 = "0.9.0"
   ingress_chart                   = "ingress-azure"

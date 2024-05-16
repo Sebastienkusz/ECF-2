@@ -71,23 +71,28 @@ module "aks" {
   # resource_group_id           = data.azurerm_resource_group.main.id
 }
 
+module "cert_manager" {
+  source            = "./modules/cert_manager"
+  letsencrypt_email = "skusz@simplonformations.onmicrosoft.com"
+}
+
 module "helm" {
-  depends_on                      = [module.aks, module.gateway]
-  resource_group                  = local.resource_group
-  resource_group_name             = local.resource_group_name
-  subscription_id                 = local.subscription_id
-  server_domain                   = module.gateway.gateway_fqdn
-  source                          = "./modules/helm"
-#   prometheus_chart                = local.prometheus_chart
-#   prometheus_name                 = local.prometheus_name
-#   prometheus_namespace_creation   = local.prometheus_namespace_creation
-#   prometheus_namespace            = local.prometheus_namespace
-#   prometheus_repository           = local.prometheus_repository
+  depends_on          = [module.aks, module.gateway]
+  resource_group      = local.resource_group
+  resource_group_name = local.resource_group_name
+  subscription_id     = local.subscription_id
+  server_domain       = module.gateway.gateway_fqdn
+  source              = "./modules/helm"
+  #   prometheus_chart                = local.prometheus_chart
+  #   prometheus_name                 = local.prometheus_name
+  #   prometheus_namespace_creation   = local.prometheus_namespace_creation
+  #   prometheus_namespace            = local.prometheus_namespace
+  #   prometheus_repository           = local.prometheus_repository
   # grafana_admin                   = local.grafana_admin
   grafana_name                    = local.grafana_name
   grafana_chart                   = local.grafana_chart
   grafana_namespace               = local.grafana_namespace
-  grafana_version              = local.grafana_version
+  grafana_version                 = local.grafana_version
   ingress_chart                   = local.ingress_chart
   ingress_name                    = local.ingress_name
   ingress_namespace_creation      = local.ingress_namespace_creation
