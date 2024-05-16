@@ -16,5 +16,5 @@ output "vm_test_fqdn" {
 }
 
 output "gateway_fqdn" {
-  value = " http://${module.gateway.gateway_fqdn} "
+  value = " https://${module.gateway.gateway_fqdn} "
 }

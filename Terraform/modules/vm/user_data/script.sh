@@ -80,5 +80,5 @@ kubectl apply -f /microservices-demo/release/kubernetes-manifests.yaml --kubecon
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml --kubeconfig /.kube/config
 
-sleep 100
+sleep 250
 kubectl apply -f /ingress.yaml --kubeconfig /.kube/config
