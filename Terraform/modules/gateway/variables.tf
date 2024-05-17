@@ -82,6 +82,7 @@ variable "frontend_protocol" {
 variable "frontend_port" {
   type = number
 }
+
 variable "rule_type" {
   type        = string
   description = "(Required) The Type of Routing that should be used for this Rule."

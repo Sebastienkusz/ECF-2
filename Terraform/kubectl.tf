@@ -4,9 +4,9 @@ resource "time_sleep" "wait_90_seconds" {
   create_duration = "90s"
 }
 
-resource "kubectl_manifest" "test" {
-    depends_on = [ time_sleep.wait_90_seconds ]
-    yaml_body = <<YAML
+resource "kubectl_manifest" "ingress_prod" {
+  depends_on = [time_sleep.wait_90_seconds]
+  yaml_body  = <<YAML
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

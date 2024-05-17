@@ -2,6 +2,4 @@
 - hosts: vm_test
   become: true
   roles:
-    # - redis
-    # - node
     - users
