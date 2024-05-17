@@ -86,7 +86,7 @@ resource "azurerm_virtual_machine" "main" {
   os_profile {
     computer_name  = "${var.resource_group_name}-vm"
     admin_username = var.admin_username
-    custom_data    = file("${path.module}/user_data/script.sh")
+    custom_data    = file("${path.root}/user_data/script.sh")
   }
 
   os_profile_linux_config {

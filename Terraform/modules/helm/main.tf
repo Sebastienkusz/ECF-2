@@ -1,10 +1,10 @@
-
-resource "helm_release" "grafana" {
-  name             = var.grafana_name
-  chart            = var.grafana_chart
-  create_namespace = var.grafana_namespace_creation
-  namespace        = var.grafana_namespace
-  version          = var.grafana_version
+# Application Google Online Boutique
+resource "helm_release" "google_ob" {
+  name             = var.google_ob_name
+  chart            = var.google_ob_chart
+  create_namespace = var.google_ob_namespace_creation
+  namespace        = var.google_ob_namespace
+  version          = var.google_ob_version
 }
 
 # Install nginx ingress controller form helm repo add application-gateway-kubernetes-ingress https://appgwingress.blob.core.windows.net/ingress-azure-helm-package/

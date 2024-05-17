@@ -66,7 +66,7 @@ sudo mv ./kind /usr/local/bin/kind
 sudo snap install kubectl --classic
 
 # Clone repo Microservices
-git clone --depth 1 --branch v0 https://github.com/GoogleCloudPlatform/microservices-demo.git
+git clone --branch v0 https://github.com/GoogleCloudPlatform/microservices-demo.git
 
 sudo mkdir .kube
 sudo adduser --gecos '' --disabled-password kind
@@ -75,8 +75,9 @@ kind create cluster --config /kind-config.yaml --kubeconfig /.kube/config
 
 sudo chmod 660 /.kube/config
 sudo chown -R kind: /.kube/
+sudo chown -R kind: /microservices-demo/
 
-kubectl apply -f /microservices-demo/release/kubernetes-manifests.yaml --kubeconfig /.kube/config
+kubectl apply -f /microservices-demo/release/kubernetes-manifests.yaml --kubeconfig /.kube/config 
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml --kubeconfig /.kube/config
 
